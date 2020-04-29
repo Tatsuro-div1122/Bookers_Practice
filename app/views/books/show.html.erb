@@ -1,0 +1,86 @@
+<div class="container">
+	<div class="row">
+		<div class="col-lg-3">
+			<%= render 'shared/sidebar', user: @user, book: @book %>
+		</div>
+		<div class="col-lg-3">
+			<table class="table">
+				<thead>
+					<tr>
+						<h2>Book detail</h2>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td>
+							<%= link_to user_path(@created_book.user.id) do %>
+							<%= attachment_image_tag @created_book.user, :profile_image, fallback: "no_image.jpg" %>
+							<% end %>
+						</td>
+						<td>
+							<%= link_to book_path(@created_book.id) do %>
+							<%= @created_book.title %>
+							<% end %>
+						</td>
+						<td>
+							<%= @created_book.body %>
+						</td>
+						<td>
+							<% if @created_book.user == current_user %>
+							<%= link_to "Edit", edit_book_path(@created_book.id), class: "btn btn-success" %>
+							<% end %>
+						</td>
+						<td>
+							<% if @created_book.user == current_user %>
+							<%= link_to "Destory", book_path(@created_book.id),method: :delete, class: "btn btn-danger", "data-confirm" => "Are you sure?" %>
+							<% end %>
+						</td>
+						<td>
+							<ul class="list-unstyled">
+								<li>
+									<p><%= @created_book.post_comments.count %> 件コメント</p>
+								</li>
+									<% @created_book.post_comments.each do |post_comment| %>
+								<li>
+									  <%= attachment_image_tag post_comment.user, :profile_image, fallback: "no_image.jpg" %>
+								</li>
+								<li>
+									  <%= post_comment.user.name %>
+								</li>
+								<li>
+									  <%= post_comment.created_at.strftime('%Y/%m/%d') %>
+								</li>
+								<li>
+									  <%= post_comment.comment %>
+								</li>
+								<li><% if post_comment.user_id == current_user.id %>
+									  <%= link_to "Destroy", book_post_comments_path(@created_book.id), method: :delete %>
+									  <% end %>
+								</li>
+								<li><% if @created_book.favorited_by?(current_user) %>
+										  <%= link_to book_favorites_path(@created_book.id), method: :delete do%>
+										  <i class="fa fa-heart" aria-hidden="true" style="color: red;"></i>
+										  <%= @created_book.favorites.count %> いいね！
+									      <% end %>
+									  <% else %>
+									  	  <%= link_to book_favorites_path(@created_book.id), method: :post do %>
+									  	  <i class="fa fa-heart-o" aria-hidden="true"></i>
+									  	  <%= @created_book.favorites.count %> いいね！
+									  	  <% end %>
+									  <% end %>
+								</li>
+									<% end %>
+							</ul>
+						</td>
+						<td>
+							<%= form_for([@created_book, @post_comment]) do |f| %>
+							  <%= f.text_area :comment %>
+							  <%= f.submit "Post" %>
+							<% end %>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+	</div>
+</div>

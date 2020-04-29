@@ -1,0 +1,25 @@
+			<h1>User info</h1>
+			<table>
+				<tr>
+					<td><%= attachment_image_tag user, :profile_image, :fill, 60, 60, fallback: "no_image.jpg" %></td>
+				</tr>
+				<tr>
+					<td>name</td>
+					<td><%= user.name %></td>
+				</tr>
+				<tr>
+					<td>introduction</td>
+					<td><%= user.introduction %></td>
+				</tr>
+			</table>
+			<%= link_to "#", edit_user_path %>
+
+
+			<h1>New book</h1>
+			<%= form_for(book) do |f| %>
+				<label>Title</label><br>
+				<%= f.text_filed :title %><br>
+				<lable>Opinion</lable><br>
+				<%= f.text_area :body %><br>
+				<%= link_to "Create Book", book_path(book.id), class: "btn btn-primary" %>
+			<% end %>
